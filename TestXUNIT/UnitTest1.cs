@@ -22,19 +22,19 @@ namespace TestXUNIT
         readonly FirefoxDriver fdriver = new FirefoxDriver(@"C:\Users\mcww\source\repos\TestXUNIT\TestXUNIT\drivers");
 
         string url = "https://www.demant.com";
-        string AllowButton = "html/body/div/div/div/div[1]/div[2]/div[1]/button[3]";
-        string AboutButton = "html/body/form/div[3]/div[1]/div/div/div[1]/div[3]/ul/li[4]/a";
-        string ManagementAndGovernanceButton = "html/body/form/div[3]/div[1]/div/div/div[2]/ul/li[6]/a";
+        string AllowButton = "coi-banner__accept";
+        string AboutButton = "li.level1:nth-child(4) > a:nth-child(1)";
+        string ManagementAndGovernanceButton = ".sub-menu > ul:nth-child(1) > li:nth-child(6) > a:nth-child(1)";
         string CheckingText = "Demant employs a two-tier management structure, consisting of the Board of Directors and the Executive Board. " +
             "The Board of Directors supervises the performance of the company, its management and organisation on behalf of the shareholders. It also contributes to determining the company strategy. " +
             "The Executive Board, in turn, is responsible for the company's daily operations.";
-        string TestWait = "/html/body/form/div[3]/div[2]/div/div/div[2]/div/h1/span/span";
-        string TextOnPage = "/html/body/form/div[3]/div[2]/div/div/div[2]/div/p[1]";
-        string SearchButton = "/html/body/form/div[3]/div[1]/div/div/div/div[2]/a";
-        string SearchEngine = "/html/body/form/div[3]/div[1]/div/div/div/div[2]/div/div/input";
-        string input = "Remuneration report for 2021";
-        string Test2Wait = "/html/body/form/div[3]/div[2]/div/div/div/div/div[2]/ul/li[1]/h3/a";
-        string SearchResult = "//*[contains(@class, 'search-result')]/ul/li";
+        string TestWait = ".like-h1-xl-light";
+        string TextOnPage = "div.rich-text:nth-child(2) > div:nth-child(1) > p:nth-child(2)";
+        string SearchButton = "search";
+        string SearchEngine = ".search-field > input:nth-child(1)";
+        string input = "Annual Report 2018";
+        string Test2Wait = ".search-result > ul:nth-child(1) > li:nth-child(1) > h3:nth-child(1) > a:nth-child(1)";
+        string SearchResult = "search-result";
         
        
         [Fact]
@@ -43,19 +43,19 @@ namespace TestXUNIT
         {
             var wait = new WebDriverWait(fdriver, TimeSpan.FromSeconds(10));
             fdriver.Url = (url);
-            By allowbutton = By.XPath(AllowButton);
+            By allowbutton = By.ClassName(AllowButton);
 
             fdriver.FindElement(allowbutton).Click();
         
-            By aboutbutton = By.XPath(AboutButton);
+            By aboutbutton = By.CssSelector(AboutButton);
             fdriver.FindElement(aboutbutton).Click();
 
-            By managementandgovernancebutton = By.XPath(ManagementAndGovernanceButton);
+            By managementandgovernancebutton = By.CssSelector(ManagementAndGovernanceButton);
             fdriver.FindElement(managementandgovernancebutton).Click();
 
-            wait.Until(fdriver => fdriver.FindElement(By.XPath(TestWait)).Displayed);
+            wait.Until(fdriver => fdriver.FindElement(By.CssSelector(TestWait)).Displayed);
 
-            TextOnPage = fdriver.FindElement(By.XPath(TextOnPage)).Text;
+            TextOnPage = fdriver.FindElement(By.CssSelector(TextOnPage)).Text;
 
             Assert.Equal(TextOnPage, CheckingText);
 
@@ -72,20 +72,20 @@ namespace TestXUNIT
 
             fdriver.Url = (url);
 
-            By allowbutton = By.XPath(AllowButton);
+            By allowbutton = By.ClassName(AllowButton);
             fdriver.FindElement(allowbutton).Click();
 
-            By searchbutton = By.XPath(SearchButton);
+            By searchbutton = By.ClassName(SearchButton);
             fdriver.FindElement(searchbutton).Click();
 
-            By searchengine = By.XPath(SearchEngine);
+            By searchengine = By.CssSelector(SearchEngine);
             fdriver.FindElement(searchengine).SendKeys(input);     
             fdriver.FindElement(searchengine).SendKeys(Keys.Enter);
             Thread.Sleep(5000);
-            wait.Until(fdriver => fdriver.FindElement(By.XPath(Test2Wait)).Displayed);
+            wait.Until(fdriver => fdriver.FindElement(By.CssSelector(Test2Wait)).Displayed);
 
             List <IWebElement> ElementList = new List<IWebElement>();
-            var elementsList = fdriver.FindElements(By.XPath(SearchResult));
+            var elementsList = fdriver.FindElements(By.ClassName(SearchResult));
 
             var result = elementsList.Any(_ => _.Text.Contains(input));
 
